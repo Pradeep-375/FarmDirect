@@ -1,0 +1,53 @@
+server:
+  port: ${PORT:8080}
+  forward-headers-strategy: framework
+spring:
+  application.name: farmdirect
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/farmdirect?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+    username: ${DB_USERNAME:farmdirect}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate.ddl-auto: ${DDL_AUTO:update}   # use 'validate' + migrations once schema is stable
+    open-in-view: false
+    properties.hibernate.jdbc.time_zone: UTC
+  servlet.multipart.max-file-size: 5MB
+  servlet.multipart.max-request-size: 25MB
+  mail:
+    host: ${SMTP_HOST}
+    port: ${SMTP_PORT:587}
+    username: ${SMTP_USERNAME:}
+    password: ${SMTP_PASSWORD:}
+    properties.mail.smtp.auth: ${SMTP_AUTH:true}
+    properties.mail.smtp.starttls.enable: ${SMTP_STARTTLS:true}
+management.endpoints.web.exposure.include: health
+app:
+  frontend-url: ${FRONTEND_URL:http://localhost:5173}
+  mail-from: ${MAIL_FROM:no-reply@farmdirect.example}
+  upload-dir: ${UPLOAD_DIR:./uploads}
+  jwt:
+    secret: ${JWT_SECRET}            # >= 32 random characters
+    access-minutes: 15
+    refresh-days: 14
+  rate-limit:
+    sensitive-per-hour-per-ip: 20
+    auth-per-minute-per-ip: 30
+  sms:
+    provider: ${SMS_PROVIDER:msg91}  # msg91 | twilio
+    msg91-auth-key: ${MSG91_AUTH_KEY:}
+    msg91-notify-template-id: ${MSG91_NOTIFY_TEMPLATE_ID:}
+    twilio-account-sid: ${TWILIO_ACCOUNT_SID:}
+    twilio-auth-token: ${TWILIO_AUTH_TOKEN:}
+    twilio-from: ${TWILIO_FROM:}
+  razorpay:
+    key-id: ${RAZORPAY_KEY_ID:}
+    key-secret: ${RAZORPAY_KEY_SECRET:}
+    webhook-secret: ${RAZORPAY_WEBHOOK_SECRET:}
+  delivery:
+    base-charge: 40
+    free-above: 500
+  admin:
+    email: ${ADMIN_EMAIL:}
+    mobile: ${ADMIN_MOBILE:}
+    password: ${ADMIN_PASSWORD:}
+  seed-sample-data: ${SEED_SAMPLE_DATA:false}

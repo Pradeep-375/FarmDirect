@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Service
+metadata: { name: frontend }
+spec:
+  type: LoadBalancer   # or put an Ingress with TLS in front
+  selector: { app: frontend }
+  ports: [{ port: 80, targetPort: 80 }]

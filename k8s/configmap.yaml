@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: { name: farmdirect-config }
+data:
+  DB_URL: "jdbc:mysql://mysql:3306/farmdirect?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+  DB_USERNAME: "farmdirect"
+  SMTP_HOST: "smtp.example.com"
+  SMTP_PORT: "587"
+  SMTP_AUTH: "true"
+  SMTP_STARTTLS: "true"
+  MAIL_FROM: "no-reply@your-domain.example"
+  SMS_PROVIDER: "msg91"
+  FRONTEND_URL: "https://farmdirect.your-domain.example"
+  UPLOAD_DIR: "/app/uploads"

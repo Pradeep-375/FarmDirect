@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: backend }
+spec:
+  replicas: 1   # in-memory rate limiter + local uploads: keep 1 until Redis and object storage are added
+  selector: { matchLabels: { app: backend } }
+  template:
+    metadata: { labels: { app: backend } }
+    spec:
+      containers:
+        - name: backend
+          image: farmdirect-backend:1.0.0   # build and push to your registry, then update this
+          ports: [{ containerPort: 8080 }]
+          envFrom:
+            - configMapRef: { name: farmdirect-config }
+            - secretRef: { name: farmdirect-secrets }
+          volumeMounts: [{ name: uploads, mountPath: /app/uploads }]
+          readinessProbe: { httpGet: { path: /actuator/health, port: 8080 }, initialDelaySeconds: 40, periodSeconds: 10 }
+          livenessProbe: { httpGet: { path: /actuator/health, port: 8080 }, initialDelaySeconds: 90, periodSeconds: 20 }
+          resources: { requests: { cpu: 250m, memory: 512Mi }, limits: { memory: 1Gi } }
+      volumes: [{ name: uploads, persistentVolumeClaim: { claimName: farmdirect-uploads } }]
